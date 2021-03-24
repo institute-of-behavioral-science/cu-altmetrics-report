@@ -23,15 +23,16 @@ class TestGmail(unittest.TestCase):
         os.environ['DEV'] = 'True'
         self.assertEqual(gmail.get_emails(['ralphie@colorado.edu']), ['ralphie@colorado.edu'])
 
-    def test_setup(self):
-        """Check to see that we can close the gmail service object"""
-        with gmail.setup() as gmail_service:
-            self.assertIsNone(gmail_service.close())
-
     def test_create_message_with_attachment(self):
         """Check to see that the length of the base64 raw message is 448, as it should be with these input values"""
         generated_message = gmail.create_message_with_attachment('test@test.com', 'test1@test.com', 'Test Subject', 'Message Text')
         self.assertEqual(len(generated_message['raw']), 448)
+    
+    # Only works if you have set up GMAIL_CREDENTIALS and GMAIL_TOKEN
+    #def test_setup(self):
+    #    """Check to see that we can close the gmail service object"""
+    #    with gmail.setup() as gmail_service:
+    #        self.assertIsNone(gmail_service.close())
 
 if __name__ == "__main__":
     unittest.main()

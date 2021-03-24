@@ -50,19 +50,24 @@ class TestAltmetric(unittest.TestCase):
 
     def test_digest_to_hmac_list_vs_string(self):
         """Checks whether the function processes strings and lists to the same hmac value"""
-        digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112'])
-        digest_string = altmetric.digest_to_hmac('department_id|cuboulder:group:112')
+        os.environ['DEV_ALTMETRIC_API_SECRET'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
+        os.environ['DEV_ALTMETRIC_API_KEY'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
+        digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112'], 'DEV')
+        digest_string = altmetric.digest_to_hmac('department_id|cuboulder:group:112', 'DEV')
         self.assertEqual(digest_list, digest_string)
 
     def test_digest_to_hmac_list_with_order(self):
         """Checks to see if the 'order' attribute is successfully removed"""
-        digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'order', 'latest'])
-        digest_list_no_order = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'latest'])
+        os.environ['DEV_ALTMETRIC_API_SECRET'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
+        os.environ['DEV_ALTMETRIC_API_KEY'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
+        digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'order', 'latest'], 'DEV')
+        digest_list_no_order = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'latest'], 'DEV')
         self.assertEqual(digest_list, digest_list_no_order)
 
     def test_digest_to_hmac_against_string(self):
         """Checks to see if we get the right hmac with an order filter that gets removed"""
         os.environ['DEV_ALTMETRIC_API_SECRET'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
+        os.environ['DEV_ALTMETRIC_API_KEY'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
         digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'order', 'latest'], 'DEV')
         self.assertEqual(digest_list, '8eb892eb1abb99e549a521d02939722ca4610867')
     
