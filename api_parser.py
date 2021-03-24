@@ -314,6 +314,6 @@ def generate_body(email_data, email_timeframe_days, email_sender, num_results=10
         '<h3>Plus ' + str(extra_results) + ' additional publications in the last ' + timeframe + ' days. </h3><br>'
     # Add some final information at the end of the email
     body = body + \
-    '<h3>See Attached CSV for the last 12 months of publications by IBS authors.</h3>' + \
+    '<h3>See Attached CSV for the last 12 months of publications by departmental authors.</h3>' + \
     'Sent by the CRS Altmetrics Reporting Tool. To unsubscribe or for questions, email <a href="mailto:' + email_sender + '">' + email_sender +'</a>'
     return body
