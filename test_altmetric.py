@@ -65,12 +65,13 @@ class TestAltmetric(unittest.TestCase):
         os.environ['DEV_ALTMETRIC_API_SECRET'] = 'c864n7yuw920upegazilhlz9nih3nkzs'
         digest_list = altmetric.digest_to_hmac(['department_id', 'cuboulder:group:112', 'order', 'latest'], 'DEV')
         self.assertEqual(digest_list, '8eb892eb1abb99e549a521d02939722ca4610867')
-
-    def test_altmetric_url_results(self):
-        """Checks to see if we can get results from the API, and whether there are more results than there were when this test was written"""
-        request = get(altmetric.altmetric_url('cuboulder:group:112'))
-        self.assertEqual(request.status_code, 200)
-        self.assertGreater(request.json()['meta']['response']['total-results'], 2357)
+    
+    # Only works if you have a defined API secret and key
+    #def test_altmetric_url_results(self):
+    #    """Checks to see if we can get results from the API, and whether there are more results than there were when this test was written"""
+    #    request = get(altmetric.altmetric_url('cuboulder:group:112'))
+    #    self.assertEqual(request.status_code, 200)
+    #    self.assertGreater(request.json()['meta']['response']['total-results'], 2357)
 
 if __name__ == "__main__":
     unittest.main()
