@@ -100,17 +100,19 @@ class TestApiParser(unittest.TestCase):
     def test_generate_body_with_dummy_data_html(self):
         """Check to make sure that the last tag is an html tag"""
         test_email_data = [{'Author': 'Test Author', 'Journal': 'Test Journal', 'PubDate': datetime.datetime.now().date(), 'Title': 'Test Title', 'Link': 'https://www.altmetric.com/details/101571224'}]
-        test_body = api_parser.generate_body(test_email_data, 30)
+        test_email_address = 'ralphie_dev@colorado.edu'
+        test_body = api_parser.generate_body(test_email_data, 30, test_email_address)
         parser = HTMLParser()
         parser.feed(test_body)
         test_output = parser.get_starttag_text()
         parser.close()
-        self.assertEqual(test_output, '<a href="mailto:ibshelp@colorado.edu">')
+        self.assertEqual(test_output, '<a href="mailto:ralphie_dev@colorado.edu">')
 
     def test_generate_body_with_dummy_data_author(self):
         """Check to make sure that the Test Author has been inserted correctly with a break tag"""
         test_email_data = [{'Author': 'Test Author', 'Journal': 'Test Journal', 'PubDate': datetime.datetime.now().date(), 'Title': 'Test Title', 'Link': 'https://www.altmetric.com/details/101571224'}]
-        test_body = api_parser.generate_body(test_email_data, 30)
+        test_email_address = 'ralphie_dev@colorado.edu'
+        test_body = api_parser.generate_body(test_email_data, 30, test_email_address)
         self.assertNotEqual(test_body.find('Author(s): Test Author<br>'), -1)
 
 if __name__ == "__main__":

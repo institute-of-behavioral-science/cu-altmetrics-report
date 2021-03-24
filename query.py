@@ -65,7 +65,7 @@ DATE = datetime.now().strftime("%Y-%m-%d")
 FILENAME = 'Altmetric Pubs ' + DATE + '.csv'
 
 # Generate the email body in HTML with the data we gathered from the API
-EMAIL_BODY = generate_body(EMAIL_DATA, EMAIL_TIMEFRAME_DAYS)
+EMAIL_BODY = generate_body(EMAIL_DATA, EMAIL_TIMEFRAME_DAYS, EMAIL_ADDRESS)
 
 def main(email_address, email_friendly_name, email_subject):
     """Writes the CSV data to the csv file, then opens a connection to gmail and sends the email with that attachment"""

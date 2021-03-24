@@ -280,7 +280,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
 
     return csv_data, email_data
 
-def generate_body(email_data, email_timeframe_days, num_results=10):
+def generate_body(email_data, email_timeframe_days, email_sender, num_results=10):
     """Takes in the list of dictionaries from email_data and formats it into a list of publications within email_timeframe_days"""
     # Gets the earliest publication in the included list and the duration to include as strings for display
     duration = str((datetime.now().date() - email_data[-1]['PubDate']).days)
@@ -315,5 +315,5 @@ def generate_body(email_data, email_timeframe_days, num_results=10):
     # Add some final information at the end of the email
     body = body + \
     '<h3>See Attached CSV for the last 12 months of publications by IBS authors.</h3>' + \
-    'Sent by IBS CRS. To unsubscribe or for questions, email <a href="mailto:ibshelp@colorado.edu">ibshelp@colorado.edu</a>'
+    'Sent by the CRS Altmetrics Reporting Tool. To unsubscribe or for questions, email <a href="mailto:' + email_sender + '">' + email_sender +'</a>'
     return body
