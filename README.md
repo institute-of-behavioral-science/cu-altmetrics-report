@@ -1,6 +1,6 @@
 # CU Altmetrics Report
 
-Connects to the Altmetric API to get information on CU Department publications, and then publishes this to a CSV and email report.
+Connects to the Altmetric API to get information on CU Department publications, and then publishes this to a CSV and email report. I am very new to Python, so if you see anything out of place or my code is messy, please let me know!
 
 # Variables
 
