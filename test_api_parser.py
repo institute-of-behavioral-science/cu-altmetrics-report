@@ -11,16 +11,6 @@ from altmetric import altmetric_url
 class TestApiParser(unittest.TestCase):
     """Tests API Parser functions from api_parser.py"""
 
-    def test_list_to_string_defaults(self):
-        """Checks to see if an input list comes out the same as a .join(), as this is the functionality we're duplicating"""
-        test_list = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6']
-        self.assertEqual(api_parser.list_to_string(test_list), ', '.join(test_list))
-
-    def test_list_to_string_semicolon(self):
-        """Checks to see if an input list comes out with semicolons the same as a .join() as this is the functionality we're duplicating"""
-        test_list = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6']
-        self.assertEqual(api_parser.list_to_string(test_list, '; '), '; '.join(test_list))
-
     def test_csv_titles_literal(self):
         """Make sure we get the same titles out (that they haven't been changed)"""
         test_tuple = ('Altmetric Attention Score',

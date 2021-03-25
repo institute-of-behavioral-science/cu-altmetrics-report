@@ -7,21 +7,11 @@ import requests
 
 from altmetric import badge_to_details_url
 
-def list_to_string(input_list, delimiter=', '):
-    """Turns input_list into a string with the given delimiter for consistency. Yes I could have just used .join()"""
-    temp_string = ''
-    for item in input_list:
-        if temp_string == '':
-            temp_string = temp_string + item
-        else:
-            temp_string = temp_string + delimiter + item
-    return temp_string
-
 def assign_attribute(attribute_dictionary, sub_attribute):
     """Grabs the correct attribute from our data dictionary so that we can assign it to a variable"""
     if sub_attribute in attribute_dictionary.keys():
         if isinstance(attribute_dictionary[sub_attribute], list):
-            return list_to_string(attribute_dictionary[sub_attribute])
+            return ', '.join(attribute_dictionary[sub_attribute])
         return attribute_dictionary[sub_attribute]
     return ''
 
@@ -193,7 +183,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             for author in r['institutional-authors']:
                 if author['id'] in include_map.keys():
                     author_list.append(include_map[author['id']]['name'].title())
-            authors = list_to_string(author_list, delimiter='; ')
+            authors = '; '.join(author_list)
         else:
             authors = ''
 
@@ -202,7 +192,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             for department in r['institutional-departments']:
                 if department['id'] in include_map.keys():
                     department_list.append(include_map[department['id']]['name'])
-            departments = list_to_string(department_list, delimiter='; ')
+            departments = '; '.join(department_list)
         else:
             departments = ''
 
@@ -213,7 +203,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
                 journal_issns = journal_attr['issns']
 
                 if isinstance(journal_issns, list):
-                    journal_issns = list_to_string(journal_issns)
+                    journal_issns = ', '.join(journal_issns)
             else:
                 journal_title = ''
                 journal_issns = ''
@@ -223,7 +213,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             for subject in r['fields-of-research']:
                 if subject['id'] in include_map.keys():
                     subject_list.append(include_map[subject['id']]['name'])
-            subjects = list_to_string(subject_list, delimiter='; ')
+            subjects = '; '.join(subject_list)
         else:
             subjects = ''
 
@@ -232,7 +222,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             for affiliation in r['affiliations']:
                 if affiliation['id'] in include_map.keys():
                     affiliation_list.append(include_map[affiliation['id']]['name'])
-            affiliations = list_to_string(affiliation_list, delimiter='; ')
+            affiliations = '; '.join(affiliation_list)
         else:
             affiliations = ''
 
@@ -241,7 +231,7 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             for funder in r['funders']:
                 if funder['id'] in include_map.keys():
                     funder_list.append(include_map[funder['id']]['name'])
-            funders = list_to_string(funder_list, delimiter='; ')
+            funders = '; '.join(funder_list)
         else:
             funders = ''
 
