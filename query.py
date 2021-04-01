@@ -69,7 +69,7 @@ EMAIL_BODY = generate_body(EMAIL_DATA, EMAIL_TIMEFRAME_DAYS, EMAIL_ADDRESS)
 
 def main(email_address, email_friendly_name, email_subject):
     """Writes the CSV data to the csv file, then opens a connection to gmail and sends the email with that attachment"""
-    with open(FILENAME, 'w', newline='') as csvfile:
+    with open(FILENAME, 'w', newline='', encoding='utf-8-sig') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(CSV_DATA)
 
