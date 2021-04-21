@@ -49,7 +49,7 @@ def digest_to_hmac(filter_list, environment_prefix=None):
     digest = hmac.new(api_secret, filters, 'sha1').hexdigest()
     return digest
 
-def altmetric_url(department, environment_prefix=None, pages_to_get=100):
+def altmetric_url(department, environment_prefix=None, page_size=100):
     """Generates an Altmetric API URL based on the desired filters passed as an argument either as a list or as a | separated string"""
     department_for_url = department.replace(':', '%3A')
     web_filters = 'department_id|' + department
@@ -59,6 +59,6 @@ def altmetric_url(department, environment_prefix=None, pages_to_get=100):
         environment_variable = environment_prefix + '_ALTMETRIC_API_KEY'
     digest = digest_to_hmac(web_filters, environment_prefix)
     key = get_api(environment_variable)
-    url = 'https://www.altmetric.com/explorer/api/research_outputs?digest=' + str(digest) + '&filter[department_id]=' + department_for_url + '&filter[order]=publication_date&key=' + key + '&page[size]=' + str(pages_to_get)
+    url = 'https://www.altmetric.com/explorer/api/research_outputs?digest=' + str(digest) + '&filter[department_id]=' + department_for_url + '&filter[order]=publication_date&key=' + key + '&page[size]=' + str(page_size)
     url = url.replace('[', '%5B').replace(']', '%5D')
     return url
