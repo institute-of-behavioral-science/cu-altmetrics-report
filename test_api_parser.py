@@ -95,14 +95,14 @@ class TestApiParser(unittest.TestCase):
     #    """Check to make sure we can get the last 30 days of data, and that it has at least one article included"""
     #    url = altmetric_url('cuboulder:group:112', None, 1)
     #    department_exclusions = ['Institute of Behavioral Science (IBS)', 'Research Professors', 'Other Faculty Titles', 'Regular Faculty', 'Rostered Tenure Track Faculty', 'Postdocs', 'Organisation']
-    #    pub_data, _ = api_parser.get_altmetric_data(url, 30, False, department_exclusions)
+    #    pub_data, _ = api_parser.get_altmetric_data(url, 30, department_exclusions)
     #    self.assertEqual(pub_data[0]['type'], 'research-output')
 
     #def test_get_altmetric_data_include_map(self):
     #    """Check to make sure we're getting 'includes' so that we can map IDs to authors, journals, etc"""
     #    url = altmetric_url('cuboulder:group:112', None, 1)
     #    department_exclusions = ['Institute of Behavioral Science (IBS)', 'Research Professors', 'Other Faculty Titles', 'Regular Faculty', 'Rostered Tenure Track Faculty', 'Postdocs', 'Organisation']
-    #    _, include_map = api_parser.get_altmetric_data(url, 30, False, department_exclusions)
+    #    _, include_map = api_parser.get_altmetric_data(url, 30, department_exclusions)
     #    self.assertGreater(len(include_map), 0)
     #    self.assertTrue(list(include_map.keys())[0].isalnum())
 
