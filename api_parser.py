@@ -35,74 +35,55 @@ def csv_titles():
             'Details Page URL'
             )
 
-def get_altmetric_data(url, timeframe_days=365, include_all=True, department_exclusions=['Research Professors', 'Other Faculty Titles', 'Regular Faculty', 'Rostered Tenure Track Faculty', 'Postdocs', 'Organisation']):
+def get_altmetric_data(url, timeframe_days=365, department_exclusions=['Research Professors', 'Other Faculty Titles', 'Regular Faculty', 'Rostered Tenure Track Faculty', 'Postdocs', 'Organisation']):
     """Gets data from the API and processes it into a data dictionary with the publications.
     Also processes the include_map, which associates Altmetric IDs for Journals,
     Authors, and other important attributes with their human-readable names"""
     # Initialize our return values
-    data_dict = {}
+    pub_data = []
     include_map = {}
 
     # Go request the json from the api
-    full_request = requests.get(url).json()
+    request = requests.get(url).json()
 
     # Figure out how many pages of results there are
-    total_pages = full_request['meta']['response']['total-pages']
-
-    # Store the publications ('data') section to our data dictionary
-    data_dict['data'] = full_request['data']
-
-    # Get the 'include' data (Journal/Author/etc mappings to altmetric IDs)
-    included = full_request['included']
+    total_pages = request['meta']['response']['total-pages']
 
     # Exclude some redundant 'department' and 'affiliation' fields. Used below
     affiliation_exclusions = ['University of Colorado Boulder']
 
     # Go through the API 'include' data and map IDs to friendly names in include_map
     # For the first page only
-    for include in included:
-        if include['type'] == 'journal':
-            include_map[include['id']] = {'title': include['attributes']['title'], 'issns': include['attributes']['issns']}
-        if include['type'] == 'author':
-            include_map[include['id']] = {'name': include['attributes']['name']}
-        if include['type'] == 'department' and include['attributes']['name'] not in department_exclusions:
-            include_map[include['id']] = {'name': include['attributes']['name']}
-        if include['type'] == 'grid-affiliation' and include['attributes']['name'] not in affiliation_exclusions:
-            include_map[include['id']] = {'name': include['attributes']['name']}
-        if include['type'] == 'grid-funder':
-            include_map[include['id']] = {'name': include['attributes']['name']}
-        if include['type'] == 'field-of-research':
-            include_map[include['id']] = {'name': include['attributes']['name']}
-
     # Do the same for subsequent pages, up until the last result on the page is beyond our timeframe_days value
-    if include_all:
-        temp_request = full_request
-        last_page = False
-        for i in range(total_pages - 1):
-            time.sleep(0.5)
-            temp_request = requests.get(temp_request['links']['next']).json()
-            if last_page:
-                break
-            data_dict['data'].extend(temp_request['data'])
-            included = temp_request['included']
-            for include in included:
-                if include['id'] not in include_map.keys():
-                    if include['type'] == 'journal':
-                        include_map[include['id']] = {'title': include['attributes']['title'], 'issns': include['attributes']['issns']}
-                    if include['type'] == 'author':
-                        include_map[include['id']] = {'name': include['attributes']['name']}
-                    if include['type'] == 'department' and include['attributes']['name'] not in department_exclusions:
-                        include_map[include['id']] = {'name': include['attributes']['name']}
-                    if include['type'] == 'grid-affiliation' and include['attributes']['name'] not in affiliation_exclusions:
-                        include_map[include['id']] = {'name': include['attributes']['name']}
-                    if include['type'] == 'grid-funder':
-                        include_map[include['id']] = {'name': include['attributes']['name']}
-                    if include['type'] == 'field-of-research':
-                        include_map[include['id']] = {'name': include['attributes']['name']}
-            if type(temp_request['data'][-1]['attributes']['publication-date']) is None or (datetime.now() - datetime.strptime(temp_request['data'][-1]['attributes']['publication-date'], '%Y-%m-%d')) > timedelta(days=timeframe_days):
-                last_page = True
+    last_page = False
+    for i in range(total_pages):
+        time.sleep(0.5)
+        print(f'Loading page {i+1} of {total_pages}')
+        if last_page:
+            break
+        # Store the publications ('data') section to our data dictionary
+        pub_data.extend(request['data'])
+        # Get the 'include' data (Journal/Author/etc mappings to altmetric IDs)
+        included = request['included']
+        for include in included:
+            if include['id'] not in include_map.keys():
+                if include['type'] == 'journal':
+                    include_map[include['id']] = {'title': include['attributes']['title'], 'issns': include['attributes']['issns']}
+                if include['type'] == 'author':
+                    include_map[include['id']] = {'name': include['attributes']['name']}
+                if include['type'] == 'department' and include['attributes']['name'] not in department_exclusions:
+                    include_map[include['id']] = {'name': include['attributes']['name']}
+                if include['type'] == 'grid-affiliation' and include['attributes']['name'] not in affiliation_exclusions:
+                    include_map[include['id']] = {'name': include['attributes']['name']}
+                if include['type'] == 'grid-funder':
+                    include_map[include['id']] = {'name': include['attributes']['name']}
+                if include['type'] == 'field-of-research':
+                    include_map[include['id']] = {'name': include['attributes']['name']}
+        if request['links']['self'] != request['links']['last']:
+            request = requests.get(request['links']['next']).json()
+        if type(request['data'][-1]['attributes']['publication-date']) is None or (datetime.now() - datetime.strptime(request['data'][-1]['attributes']['publication-date'], '%Y-%m-%d')) > timedelta(days=timeframe_days):
+            last_page = True
     # Store this as a list of dicts to be easier to iterate over
-    pub_data = data_dict['data']
     return pub_data, include_map
 
 def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days=60):

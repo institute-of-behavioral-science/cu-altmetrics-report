@@ -57,7 +57,7 @@ ALTMETRIC_URL = altmetric_url(ALTMETRICS_DEPT_ID)
 DEPARTMENT_EXCLUSIONS = ['Institute of Behavioral Science (IBS)', 'Research Professors', 'Other Faculty Titles', 'Regular Faculty', 'Rostered Tenure Track Faculty', 'Postdocs', 'Organisation']
 
 # Get data from the API and put it into python datastructures for processing
-PUB_DATA, INCLUDE_MAP = get_altmetric_data(ALTMETRIC_URL, TIMEFRAME_DAYS, True, DEPARTMENT_EXCLUSIONS)
+PUB_DATA, INCLUDE_MAP = get_altmetric_data(ALTMETRIC_URL, TIMEFRAME_DAYS, DEPARTMENT_EXCLUSIONS)
 CSV_DATA, EMAIL_DATA = generate_csv(PUB_DATA, INCLUDE_MAP, TIMEFRAME_DAYS, EMAIL_TIMEFRAME_DAYS)
 
 # Get the current YYYY-mm-dd date and create a filename out of it
