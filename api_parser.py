@@ -188,6 +188,9 @@ def generate_csv(pub_data, include_map, timeframe_days=365, email_timeframe_days
             else:
                 journal_title = ''
                 journal_issns = ''
+        else:
+            journal_title = ''
+            journal_issns = ''
 
         if 'fields-of-research' in r.keys():
             subject_list = []
