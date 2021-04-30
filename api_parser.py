@@ -59,8 +59,6 @@ def get_altmetric_data(url, timeframe_days=365, department_exclusions=['Research
     for i in range(total_pages):
         time.sleep(0.5)
         print(f'Loading page {i+1} of {total_pages}')
-        if last_page:
-            break
         # Store the publications ('data') section to our data dictionary
         pub_data.extend(request['data'])
         # Get the 'include' data (Journal/Author/etc mappings to altmetric IDs)
@@ -79,6 +77,8 @@ def get_altmetric_data(url, timeframe_days=365, department_exclusions=['Research
                     include_map[include['id']] = {'name': include['attributes']['name']}
                 if include['type'] == 'field-of-research':
                     include_map[include['id']] = {'name': include['attributes']['name']}
+        if last_page:
+            break
         if request['links']['self'] != request['links']['last']:
             request = requests.get(request['links']['next']).json()
         if type(request['data'][-1]['attributes']['publication-date']) is None or (datetime.now() - datetime.strptime(request['data'][-1]['attributes']['publication-date'], '%Y-%m-%d')) > timedelta(days=timeframe_days):
