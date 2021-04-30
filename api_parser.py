@@ -258,7 +258,7 @@ def generate_body(email_data, email_timeframe_days, email_sender, num_results=10
     """Takes in the list of dictionaries from email_data and formats it into a list of publications within email_timeframe_days"""
     # Gets the earliest publication in the included list and the duration to include as strings for display
     if not email_data:
-        return f'<h3>No publications were available within the last { email_timeframe_days } days'    
+        return f'<h3>No publications were available within the last { email_timeframe_days } days</h3>'
     duration = str((datetime.now().date() - email_data[-1]['PubDate']).days)
     timeframe = str(email_timeframe_days)
 
